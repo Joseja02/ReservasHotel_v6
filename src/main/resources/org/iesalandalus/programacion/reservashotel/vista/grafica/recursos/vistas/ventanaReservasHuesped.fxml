@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="439.0" prefWidth="709.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.iesalandalus.programacion.reservashotel.vista.grafica.controladores.ControladorVentanaReservasHuesped">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="109.0" stroke="BLACK" strokeType="INSIDE" width="709.0" />
+      <Label layoutX="183.0" layoutY="35.0" prefHeight="40.0" prefWidth="344.0" text="RESERVAS DEl HUESPED">
+         <font>
+            <Font name="Hans Kendrick Regular" size="32.0" />
+         </font>
+      </Label>
+      <TableView fx:id="tvReservasHuesped" layoutX="4.0" layoutY="208.0" prefHeight="227.0" prefWidth="700.0">
+        <columns>
+          <TableColumn fx:id="tcNombreDni" prefWidth="171.0" text="Nombre y Dni (Huesped)" />
+          <TableColumn fx:id="tcIdTipo" minWidth="0.0" prefWidth="199.0" text="Identificador y Tipo (Habitacion)" />
+            <TableColumn fx:id="tcImporte" prefWidth="119.0" text="Importe a pagar" />
+            <TableColumn fx:id="tcFechaInicio" minWidth="3.0" prefWidth="114.0" text="Fecha de inicio" />
+            <TableColumn fx:id="tcFechaFin" prefWidth="96.0" text="Fecha de fin" />
+        </columns>
+      </TableView>
+      <Label layoutX="257.0" layoutY="118.0" text="HUESPED SELECCIONADO">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblHuesped" alignment="CENTER" layoutX="10.0" layoutY="143.0" prefHeight="17.0" prefWidth="691.0" text="Label" textAlignment="CENTER" />
+      <Button fx:id="btnCargarReservasHuesped" layoutX="207.0" layoutY="174.0" mnemonicParsing="false" onAction="#cargarDatosReservasHuesped" text="Pulsa aqui para cargar las reservas del Huesped" />
+   </children>
+</AnchorPane>
