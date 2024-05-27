@@ -48,6 +48,10 @@ public class Huespedes implements IHuespedes {
         escribirXML();
     }
     public Huesped elementToHuesped(Element elemento){
+        if (elemento == null){
+            return null;
+        }
+
         String nombre = elemento.getElementsByTagName(NOMBRE).item(0).getTextContent();
         String dni = elemento.getElementsByTagName(DNI).item(0).getTextContent();
         String correo = elemento.getElementsByTagName(CORREO).item(0).getTextContent();
@@ -57,6 +61,10 @@ public class Huespedes implements IHuespedes {
         return new Huesped(nombre, dni, correo, telefono, fechaNacimiento);
     }
     private Element huespedToElement(Document documento, Huesped huesped) {
+        if (documento == null || huesped == null){
+            return null;
+        }
+
         Element huespedElement = documento.createElement(HUESPED);
 
         Element nombreElement = documento.createElement(NOMBRE);
@@ -64,7 +72,7 @@ public class Huespedes implements IHuespedes {
         huespedElement.appendChild(nombreElement);
 
         Element dniElement = documento.createElement(DNI);
-        dniElement.appendChild(documento.createTextNode(huesped.getDni()));
+        dniElement.appendChild(documento.createAttribute(huesped.getDni()));
         huespedElement.appendChild(dniElement);
 
         Element correoElement = documento.createElement(CORREO);
