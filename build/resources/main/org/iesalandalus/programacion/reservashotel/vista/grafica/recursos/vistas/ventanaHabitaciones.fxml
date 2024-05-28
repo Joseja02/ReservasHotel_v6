@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="790.0" prefWidth="1022.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.iesalandalus.programacion.reservashotel.vista.grafica.controladores.ControladorVentanaHabitaciones">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="113.0" stroke="BLACK" strokeType="INSIDE" width="1022.0" />
+      <Label layoutX="370.0" layoutY="32.0" text="HABITACIONES">
+         <font>
+            <Font name="Hans Kendrick Regular" size="38.0" />
+         </font>
+      </Label>
+      <TableView fx:id="tvHabitaciones" layoutX="48.0" layoutY="518.0" prefHeight="258.0" prefWidth="928.0">
+        <columns>
+          <TableColumn fx:id="tcIdentificador" prefWidth="107.0" text="Identificador" />
+          <TableColumn fx:id="tcPlantaPuerta" minWidth="8.0" prefWidth="112.0" text="Planta y puerta" />
+            <TableColumn fx:id="tcTipoHabitacion" prefWidth="175.0" text="Tipo de habitacion" />
+            <TableColumn fx:id="tcDatosHabitacion" minWidth="9.0" prefWidth="533.0" text="Datos de la habitacion" />
+        </columns>
+      </TableView>
+      <Button fx:id="btnAnadirHabitacion" layoutX="114.0" layoutY="177.0" mnemonicParsing="false" onAction="#insertarHabitacion" text="Añadir Habitacion" />
+      <Button fx:id="btnBorrarHabitacion" layoutX="346.0" layoutY="255.0" mnemonicParsing="false" onAction="#borrarHabitacion" text="Borrar Habitacion" />
+      <Button fx:id="btnActualizarLista" layoutX="881.0" layoutY="488.0" mnemonicParsing="false" onAction="#actualizarListaHabitaciones" text="Actualizar Lista" />
+      <VBox alignment="BASELINE_LEFT" layoutX="14.0" layoutY="202.0" prefHeight="184.0" prefWidth="311.0" spacing="14.0">
+         <children>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <left>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Planta" wrappingWidth="38.6953125" BorderPane.alignment="CENTER" />
+               </left>
+               <right>
+                  <TextField fx:id="tfPlanta" prefHeight="25.0" prefWidth="44.0" BorderPane.alignment="CENTER" />
+               </right>
+            </BorderPane>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <left>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Puerta" BorderPane.alignment="CENTER" />
+               </left>
+               <right>
+                  <TextField fx:id="tfPuerta" prefHeight="25.0" prefWidth="44.0" BorderPane.alignment="CENTER" />
+               </right>
+            </BorderPane>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <left>
+                  <Label text="Precio" BorderPane.alignment="CENTER" />
+               </left>
+               <right>
+                  <TextField fx:id="tfPrecio" prefHeight="25.0" prefWidth="45.0" BorderPane.alignment="CENTER" />
+               </right>
+            </BorderPane>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <left>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tipo de Habitacion" BorderPane.alignment="CENTER" />
+               </left>
+               <right>
+                  <ChoiceBox fx:id="cbTipoHabitacion" prefHeight="25.0" prefWidth="149.0" BorderPane.alignment="CENTER" />
+               </right>
+            </BorderPane>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <left>
+                  <Label text="Camas Individuales (Solo para Doble y Triple)" BorderPane.alignment="CENTER" />
+               </left>
+               <right>
+                  <TextField fx:id="tfCamasIndividuales" prefHeight="25.0" prefWidth="44.0" BorderPane.alignment="CENTER" />
+               </right>
+            </BorderPane>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <left>
+                  <Label text="Camas Dobles (Solo para Doble y Triple)" BorderPane.alignment="CENTER" />
+               </left>
+               <right>
+                  <TextField fx:id="tfCamasDobles" prefHeight="25.0" prefWidth="43.0" BorderPane.alignment="CENTER" />
+               </right>
+            </BorderPane>
+         </children>
+         <padding>
+            <Insets left="2.0" top="5.0" />
+         </padding>
+      </VBox>
+      <BorderPane layoutX="353.0" layoutY="290.0" prefHeight="25.0" prefWidth="318.0">
+         <left>
+            <Label text="Identificador" BorderPane.alignment="CENTER" />
+         </left>
+         <right>
+            <TextField fx:id="tfIdBorrar" BorderPane.alignment="CENTER" />
+         </right>
+      </BorderPane>
+      <Label layoutX="714.0" layoutY="138.0" prefHeight="25.0" prefWidth="269.0" text="Buscar una Habitacion por su identificador">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <VBox layoutX="693.0" layoutY="195.0" prefHeight="121.0" prefWidth="311.0">
+         <children>
+            <BorderPane prefHeight="41.0" prefWidth="329.0">
+               <left>
+                  <Label text="Busqueda normal" BorderPane.alignment="CENTER" />
+               </left>
+               <right>
+                  <TextField fx:id="tfIdBuscar" prefHeight="25.0" prefWidth="180.0" BorderPane.alignment="CENTER" />
+               </right>
+            </BorderPane>
+            <BorderPane prefHeight="41.0" prefWidth="329.0">
+               <left>
+                  <Label text="Orden ascendente" BorderPane.alignment="CENTER" />
+               </left>
+               <right>
+                  <TextField fx:id="tfIdBuscarAsc" prefHeight="25.0" prefWidth="180.0" BorderPane.alignment="CENTER" />
+               </right>
+            </BorderPane>
+            <BorderPane prefHeight="41.0" prefWidth="329.0">
+               <left>
+                  <Label text="Orden descendente" BorderPane.alignment="CENTER" />
+               </left>
+               <right>
+                  <TextField fx:id="tfIdBuscarDesc" prefHeight="25.0" prefWidth="180.0" BorderPane.alignment="CENTER" />
+               </right>
+            </BorderPane>
+         </children>
+      </VBox>
+      <Button fx:id="btnBuscarReservasHabitacion" layoutX="470.0" layoutY="255.0" mnemonicParsing="false" onAction="#mostrarReservasHabitacion" prefHeight="25.0" prefWidth="201.0" text="Buscar reservas de una habitacion" />
+      <BorderPane layoutX="15.0" layoutY="436.0" prefHeight="40.0" prefWidth="309.0">
+         <left>
+            <Label text="Baños (Solo para Triple y Suite)" BorderPane.alignment="CENTER" />
+         </left>
+         <right>
+            <TextField fx:id="tfBanos" prefHeight="25.0" prefWidth="39.0" BorderPane.alignment="CENTER" />
+         </right>
+      </BorderPane>
+      <BorderPane layoutX="15.0" layoutY="474.0" prefHeight="40.0" prefWidth="309.0">
+         <left>
+            <Label prefHeight="17.0" prefWidth="217.0" text="Tiene Jacuzzi (Solo Suite)" BorderPane.alignment="CENTER" />
+         </left>
+         <right>
+            <CheckBox fx:id="chkbJacuzziSi" mnemonicParsing="false" prefHeight="17.0" prefWidth="16.0" BorderPane.alignment="CENTER" />
+         </right>
+      </BorderPane>
+      <Separator layoutX="336.0" layoutY="113.0" orientation="VERTICAL" prefHeight="405.0" prefWidth="10.0" />
+      <Separator layoutX="677.0" layoutY="113.0" orientation="VERTICAL" prefHeight="405.0" prefWidth="10.0" />
+      <Label layoutX="431.0" layoutY="138.0" prefHeight="25.0" prefWidth="160.0" text="Gestionar una Habitación">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="100.0" layoutY="138.0" prefHeight="25.0" prefWidth="140.0" text="Añadir una Habitación">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="377.0" layoutY="170.0" prefHeight="65.0" prefWidth="269.0" text="Introduce el Identificador de la habitación que quieres borrar o de la cual quieres buscar sus reservas." textAlignment="CENTER" wrapText="true" />
+   </children>
+</AnchorPane>

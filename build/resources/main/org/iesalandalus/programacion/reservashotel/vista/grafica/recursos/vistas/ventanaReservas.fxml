@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="807.0" prefWidth="1022.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.iesalandalus.programacion.reservashotel.vista.grafica.controladores.ControladorVentanaReservas">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="113.0" stroke="BLACK" strokeType="INSIDE" width="1022.0" />
+      <Label layoutX="425.0" layoutY="32.0" text="RESERVAS">
+         <font>
+            <Font name="Hans Kendrick Regular" size="38.0" />
+         </font>
+      </Label>
+      <TableView fx:id="tvReservas" layoutX="13.0" layoutY="535.0" prefHeight="258.0" prefWidth="1000.0">
+        <columns>
+          <TableColumn fx:id="tcNombreDni" prefWidth="227.0" text="Nombre y Dni (Huesped)" />
+          <TableColumn fx:id="tcIdTipo" minWidth="8.0" prefWidth="213.0" text="Identificador y Tipo (Habitacion)" />
+            <TableColumn fx:id="tcImporte" prefWidth="117.0" text="Importe a pagar" />
+            <TableColumn fx:id="tcFechaInicio" minWidth="9.0" prefWidth="115.0" text="Fecha de inicio" />
+            <TableColumn fx:id="tcFechaFin" prefWidth="119.0" text="Fecha de fin" />
+            <TableColumn fx:id="tcCheckin" prefWidth="109.0" text="Check-In" />
+            <TableColumn fx:id="tcCheckout" prefWidth="99.0" text="Check-Out" />
+        </columns>
+      </TableView>
+      <Button fx:id="btnAnadirReserva" layoutX="117.0" layoutY="197.0" mnemonicParsing="false" onAction="#insertarReserva" text="Añadir Reserva" />
+      <Button fx:id="btnBorrarReserva" layoutX="341.0" layoutY="238.0" mnemonicParsing="false" onAction="#borrarReserva" prefHeight="25.0" prefWidth="112.0" text="Borrar Reserva" />
+      <Button fx:id="btnActualizarLista" layoutX="918.0" layoutY="500.0" mnemonicParsing="false" onAction="#actualizarListaReservas" text="Actualizar Lista" />
+      <VBox alignment="BASELINE_LEFT" layoutX="13.0" layoutY="222.0" prefHeight="200.0" prefWidth="302.0" spacing="14.0">
+         <children>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <left>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Fecha de inicio de la reserva" BorderPane.alignment="CENTER" />
+               </left>
+               <right>
+                  <DatePicker fx:id="dpFechaInicioReserva" prefHeight="25.0" prefWidth="131.0" BorderPane.alignment="CENTER" />
+               </right>
+            </BorderPane>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <left>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Fecha de fin de la reserva" BorderPane.alignment="CENTER" />
+               </left>
+               <right>
+                  <DatePicker fx:id="dpFechaFinReserva" prefHeight="25.0" prefWidth="131.0" BorderPane.alignment="CENTER" />
+               </right>
+            </BorderPane>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <left>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Número de personas:" BorderPane.alignment="CENTER" />
+               </left>
+               <right>
+                  <Slider fx:id="slNumPersonas" blockIncrement="1.0" max="3.0" min="1.0" value="1.0" BorderPane.alignment="CENTER" />
+               </right>
+            </BorderPane>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <left>
+                  <Label text="DNI del huésped" BorderPane.alignment="CENTER" />
+               </left>
+               <right>
+                  <TextField fx:id="tfDniHuesped" prefHeight="25.0" prefWidth="123.0" BorderPane.alignment="CENTER" />
+               </right>
+            </BorderPane>
+         </children>
+         <padding>
+            <Insets left="2.0" top="5.0" />
+         </padding>
+      </VBox>
+      <BorderPane layoutX="495.0" layoutY="231.0" prefHeight="40.0" prefWidth="181.0">
+         <left>
+            <Label text="DNI" BorderPane.alignment="CENTER" />
+         </left>
+         <right>
+            <TextField fx:id="tfDniReservaABorrar" BorderPane.alignment="CENTER" />
+         </right>
+      </BorderPane>
+      <Label layoutX="770.0" layoutY="138.0" prefHeight="25.0" prefWidth="127.0" text="Buscar una reserva">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <VBox layoutX="706.0" layoutY="190.0" prefHeight="177.0" prefWidth="302.0" spacing="20.0">
+         <children>
+            <BorderPane prefHeight="61.0" prefWidth="199.0">
+               <right>
+                  <TextField fx:id="tfDniHuespedReservas" prefHeight="25.0" prefWidth="120.0" BorderPane.alignment="CENTER" />
+               </right>
+               <left>
+                  <Label text="Buscar reservas de un huésped" BorderPane.alignment="CENTER" />
+               </left>
+            </BorderPane>
+            <BorderPane prefHeight="74.0" prefWidth="280.0">
+               <right>
+                  <TextField fx:id="tfIdHabitacionReservas" prefHeight="25.0" prefWidth="107.0" BorderPane.alignment="CENTER" />
+               </right>
+               <left>
+                  <Label text="Buscar reservas de una habitación" BorderPane.alignment="CENTER" />
+               </left>
+            </BorderPane>
+         </children>
+      </VBox>
+      <Button fx:id="btnRealizarCheckin" layoutX="341.0" layoutY="310.0" mnemonicParsing="false" onAction="#realizarCheckin" prefHeight="25.0" prefWidth="112.0" text="Realizar Checkin" />
+      <VBox layoutX="13.0" layoutY="451.0" prefHeight="74.0" prefWidth="302.0" spacing="12.0">
+         <children>
+            <BorderPane prefHeight="34.0" prefWidth="305.0">
+               <left>
+                  <Label text="Tipo de habitación" BorderPane.alignment="CENTER" />
+               </left>
+               <right>
+                  <ChoiceBox fx:id="chbTipoHabitacion" prefWidth="150.0" BorderPane.alignment="CENTER" />
+               </right>
+            </BorderPane>
+            <BorderPane prefHeight="34.0" prefWidth="305.0">
+               <left>
+                  <Label text="Régimen" BorderPane.alignment="CENTER" />
+               </left>
+               <right>
+                  <ChoiceBox fx:id="chbRegimen" prefWidth="150.0" BorderPane.alignment="CENTER" />
+               </right>
+            </BorderPane>
+         </children>
+      </VBox>
+      <Button fx:id="btnRealizarCheckout" layoutX="341.0" layoutY="384.0" mnemonicParsing="false" onAction="#realizarCheckout" prefHeight="25.0" prefWidth="112.0" text="Realizar Checkout" />
+      <ComboBox fx:id="cbEligeReserva" layoutX="525.0" layoutY="290.0" prefWidth="150.0" promptText="Elige la reserva" />
+      <Label fx:id="lblNumPersonas" layoutX="132.0" layoutY="355.0" prefHeight="20.0" prefWidth="0.0" text="0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="102.0" layoutY="141.0" text="Añadir una reserva">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Separator layoutX="327.0" layoutY="113.0" orientation="VERTICAL" prefHeight="422.0" prefWidth="8.0" />
+      <Label layoutX="441.0" layoutY="141.0" text="Gestionar una reserva">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="339.0" layoutY="164.0" prefHeight="61.0" prefWidth="338.0" text="Introduce el DNI de un Huesped que tenga, al menos, una reserva hecha. Luego, elige la reserva a gestionar en el menú desplegable de debajo." textAlignment="CENTER" wrapText="true" />
+      <Label layoutX="756.0" layoutY="178.0" text="Introduce el DNI del huesped">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="723.0" layoutY="258.0" text="Introduce el Identificador de la habitación">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Separator layoutX="690.0" layoutY="113.0" orientation="VERTICAL" prefHeight="422.0" prefWidth="8.0" />
+   </children>
+</AnchorPane>
