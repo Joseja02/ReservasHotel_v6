@@ -1,15 +1,16 @@
 package org.iesalandalus.programacion.reservashotel.modelo.negocio.fichero;
 
+import org.iesalandalus.programacion.reservashotel.modelo.dominio.Reserva;
 import org.iesalandalus.programacion.reservashotel.modelo.negocio.fichero.utilidades.UtilidadesXML;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 
 import org.iesalandalus.programacion.reservashotel.modelo.dominio.Huesped;
 import org.iesalandalus.programacion.reservashotel.modelo.negocio.IHuespedes;
 
 import javax.naming.OperationNotSupportedException;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class Huespedes implements IHuespedes {
 
     public Huespedes() {
         coleccionHuespedes = new ArrayList<>();
+        comenzar();
     }
 
     public static Huespedes getInstancia(){
@@ -53,7 +55,7 @@ public class Huespedes implements IHuespedes {
         }
 
         String nombre = elemento.getElementsByTagName(NOMBRE).item(0).getTextContent();
-        String dni = elemento.getElementsByTagName(DNI).item(0).getTextContent();
+        String dni = elemento.getAttribute(DNI);
         String correo = elemento.getElementsByTagName(CORREO).item(0).getTextContent();
         String telefono = elemento.getElementsByTagName(TELEFONO).item(0).getTextContent();
         LocalDate fechaNacimiento = LocalDate.parse(elemento.getElementsByTagName(FECHA_NACIMIENTO).item(0).getTextContent(), FORMATO_FECHA);
@@ -71,9 +73,7 @@ public class Huespedes implements IHuespedes {
         nombreElement.appendChild(documento.createTextNode(huesped.getNombre()));
         huespedElement.appendChild(nombreElement);
 
-        Element dniElement = documento.createElement(DNI);
-        dniElement.appendChild(documento.createAttribute(huesped.getDni()));
-        huespedElement.appendChild(dniElement);
+        huespedElement.setAttribute(DNI, huesped.getDni());
 
         Element correoElement = documento.createElement(CORREO);
         correoElement.appendChild(documento.createTextNode(huesped.getCorreo()));
@@ -90,15 +90,25 @@ public class Huespedes implements IHuespedes {
         return huespedElement;
     }
     private void leerXML() {
-        try {
-            Document document = UtilidadesXML.xmlToDom(RUTA_FICHERO);
-            NodeList nodeList = document.getDocumentElement().getElementsByTagName(HUESPED);
+        Document document;
+        NodeList huespedes;
+        Node huespedNodo;
 
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node node = nodeList.item(i);
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    Element element = (Element) node;
-                    Huesped huesped = elementToHuesped(element);
+        try {
+            document = UtilidadesXML.xmlToDom(RUTA_FICHERO);
+            if (document == null){
+                document = UtilidadesXML.crearDomVacio(RAIZ);
+            }
+            document.getDocumentElement().normalize();
+
+            huespedes = document.getElementsByTagName(HUESPED);
+
+            for (int i = 0; i < huespedes.getLength(); i++) {
+                huespedNodo = huespedes.item(i);
+
+                if (huespedNodo.getNodeType() == Node.ELEMENT_NODE) {
+                    Element elemento = (Element) huespedNodo;
+                    Huesped huesped = elementToHuesped(elemento);
                     coleccionHuespedes.add(huesped);
                 }
             }
@@ -106,10 +116,10 @@ public class Huespedes implements IHuespedes {
             System.out.println(e.getMessage());
         }
     }
-
     private void escribirXML() {
         try {
-            Document documento = UtilidadesXML.crearDomVacio(RAIZ);
+            Document documento;
+            documento = UtilidadesXML.crearDomVacio(RAIZ);
             for (Huesped huesped : coleccionHuespedes) {
                 Element huespedElement = huespedToElement(documento, huesped);
                 documento.getDocumentElement().appendChild(huespedElement);
@@ -119,7 +129,6 @@ public class Huespedes implements IHuespedes {
             System.out.println(e.getMessage());
         }
     }
-
     public List<Huesped> get() {
         return copiaProfundaHuespedes();
     }

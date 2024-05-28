@@ -31,7 +31,7 @@ public class VistaTexto extends Vista {
     }
     @Override
     public void terminar() {
-        System.out.print("¡Hasta luego! - Tarea Online 9 | Jose Javier Sierra Berdún");
+        System.out.print("¡Hasta luego! - Tarea Online 8 | Jose Javier Sierra Berdún");
     }
 
     public void insertarHuesped() {

@@ -26,6 +26,9 @@ public class MainApp {
         if (args.equals("-fdmongodb")){
             modelo = new Modelo(FactoriaFuenteDatos.MONGODB);
         }
+        if (args.equals("-fdfichero")){
+            modelo = new Modelo(FactoriaFuenteDatos.FICHERO);
+        }
         return modelo;
     }
     private static Vista procesarArgumentosVista(String args){

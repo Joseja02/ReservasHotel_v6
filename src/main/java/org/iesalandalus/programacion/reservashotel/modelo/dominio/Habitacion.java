@@ -22,7 +22,7 @@ public abstract class Habitacion {
     }
     public Habitacion (Habitacion habitacionCopia){
         if (habitacionCopia == null){
-            throw new NullPointerException("ERROR: No es posible copiar una habitaci髇 nula.");
+            throw new NullPointerException("ERROR: No es posible copiar una habitaci贸n nula.");
         }
         this.identificador = habitacionCopia.getIdentificador();
         this.planta = habitacionCopia.getPlanta();
@@ -53,7 +53,7 @@ public abstract class Habitacion {
     protected void setPlanta(int planta) {
 
         if (planta < MIN_NUMERO_PLANTA || planta > MAX_NUMERO_PLANTA){
-            throw new IllegalArgumentException("ERROR: No se puede establecer como planta de una habitaci髇 un valor menor que 1 ni mayor que 3.");
+            throw new IllegalArgumentException("ERROR: No se puede establecer como planta de una habitaci贸n un valor menor que 1 ni mayor que 3.");
         }
         this.planta = planta;
     }
@@ -64,7 +64,7 @@ public abstract class Habitacion {
     protected void setPuerta(int puerta) {
 
         if (puerta > MAX_NUMERO_PUERTA || puerta < MIN_NUMERO_PUERTA){
-            throw new IllegalArgumentException("ERROR: No se puede establecer como puerta de una habitaci髇 un valor menor que 0 ni mayor que 14.");
+            throw new IllegalArgumentException("ERROR: No se puede establecer como puerta de una habitaci贸n un valor menor que 0 ni mayor que 14.");
         }
         this.puerta = puerta;
     }
@@ -76,7 +76,7 @@ public abstract class Habitacion {
     public void setPrecio(double precio) {
 
         if (precio > MAX_PRECIO_HABITACION || precio < MIN_PRECIO_HABITACION){
-            throw new IllegalArgumentException("ERROR: No se puede establecer como precio de una habitaci髇 un valor menor que 40.0 ni mayor que 150.0.");
+            throw new IllegalArgumentException("ERROR: No se puede establecer como precio de una habitaci贸n un valor menor que 40.0 ni mayor que 150.0.");
         }
         this.precio = precio;
     }
@@ -96,6 +96,6 @@ public abstract class Habitacion {
     public String toString() {
         return "identificador=" + getIdentificador() +
                 " (" + planta + "-" + puerta + ")" +
-                ", precio habitaci髇=" + getPrecio();
+                ", precio habitaci贸n=" + getPrecio();
     }
 }

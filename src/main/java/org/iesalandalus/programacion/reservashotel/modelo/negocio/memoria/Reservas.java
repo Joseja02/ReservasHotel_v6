@@ -86,13 +86,11 @@ public class Reservas implements IReservas {
         }
         List<Reserva> reservasHuesped = new ArrayList<>();
         Iterator<Reserva> iterador = get().iterator();
-        int i = 0;
         while (iterador.hasNext()) {
-            Reserva reserva = get().get(i);
+            Reserva reserva = iterador.next();
             if (reserva.getHuesped().getDni().equals(huesped.getDni())) {
                 reservasHuesped.add(new Reserva(reserva));
             }
-            i++;
         }
         return reservasHuesped;
     }
@@ -103,9 +101,8 @@ public class Reservas implements IReservas {
         }
         List<Reserva> reservasHuesped = new ArrayList<>();
         Iterator<Reserva> iterador = get().iterator();
-        int i = 0;
         while (iterador.hasNext()) {
-            Reserva reserva = get().get(i);
+            Reserva reserva = iterador.next();
             if (reserva.getHabitacion() instanceof Simple && tipoHabitacion.equals(TipoHabitacion.SIMPLE)){
                 reservasHuesped.add(new Reserva(reserva));
             }
@@ -118,7 +115,6 @@ public class Reservas implements IReservas {
             if (reserva.getHabitacion() instanceof Suite && tipoHabitacion.equals(TipoHabitacion.SUITE)){
                 reservasHuesped.add(new Reserva(reserva));
             }
-            i++;
         }
         return reservasHuesped;
     }
@@ -128,13 +124,11 @@ public class Reservas implements IReservas {
         }
         List<Reserva> reservasHabitacion = new ArrayList<>();
         Iterator<Reserva> iterador = get().iterator();
-        int i = 0;
         while (iterador.hasNext()) {
-            Reserva reserva = get().get(i);
+            Reserva reserva = iterador.next();
             if (reserva.getHabitacion().getIdentificador().equals(habitacion.getIdentificador())) {
                 reservasHabitacion.add(new Reserva(reserva));
             }
-            i++;
         }
         return reservasHabitacion;
     }
@@ -142,18 +136,16 @@ public class Reservas implements IReservas {
         if (habitacion == null)
             throw new NullPointerException("ERROR: No se pueden buscar reservas de una habitación nula.");
 
-        List<Reserva> reservasHuesped = new ArrayList<>();
+        List<Reserva> reservasHabitacion = new ArrayList<>();
         Iterator<Reserva> iterador = get().iterator();
-        int i = 0;
         while (iterador.hasNext()){
-            Reserva reserva = get().get(i);
+            Reserva reserva = iterador.next();
             if (reserva.getHabitacion().getIdentificador().equals(habitacion.getIdentificador()) &&
                     reserva.getFechaInicioReserva().isAfter(LocalDate.now())) {
-                reservasHuesped.add(new Reserva(reserva));
+                reservasHabitacion.add(new Reserva(reserva));
             }
-            i++;
         }
-        return reservasHuesped;
+        return reservasHabitacion;
     }
 
     public void realizarCheckin(Reserva reserva, LocalDateTime fecha) {

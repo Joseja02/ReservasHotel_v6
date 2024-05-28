@@ -10,6 +10,8 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.iesalandalus.programacion.reservashotel.vista.grafica.LanzadorVentanaPrincipal;
+import org.iesalandalus.programacion.reservashotel.vista.grafica.VistaGrafica;
 import org.iesalandalus.programacion.reservashotel.vista.grafica.recursos.LocalizadorRecursos;
 import org.iesalandalus.programacion.reservashotel.vista.grafica.utilidades.Dialogos;
 
@@ -71,6 +73,7 @@ public class ControladorVentanaPrincipal {
     @FXML void salir(ActionEvent event) {
         if (Dialogos.mostrarDialogoConfirmacion("Reservas Hotel v5 - Jose Javier Sierra Berdún", "¿Seguro que quieres salir de la aplicación"))
         {
+            VistaGrafica.getInstancia().getControlador().terminar();
             System.exit(0);
         }
         else

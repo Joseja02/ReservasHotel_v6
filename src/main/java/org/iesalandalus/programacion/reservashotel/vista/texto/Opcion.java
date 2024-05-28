@@ -4,47 +4,45 @@ public enum Opcion {
 
     SALIR("Salir") {
         @Override
-        public void ejecutar() {
-            System.out.print("�Hasta luego! - Tarea Online 6 | Jose Javier Sierra Berd�n");
-        }
+        public void ejecutar() { vista.getControlador().terminar(); }
     },
-    INSERTAR_HUESPED("Insertar Hu�sped") {
+    INSERTAR_HUESPED("Insertar Huésped") {
         @Override
         public  void ejecutar() {
             vista.insertarHuesped();
         }
     },
-    BUSCAR_HUESPED("Buscar Hu�sped") {
+    BUSCAR_HUESPED("Buscar Huésped") {
         @Override
         public void ejecutar() {
             vista.buscarHuesped();
         }
     },
-    BORRAR_HUESPED("Borrar Hu�sped") {
+    BORRAR_HUESPED("Borrar Huésped") {
         @Override
         public void ejecutar() {
             vista.borrarHuesped();
         }
     },
-    MOSTRAR_HUESPEDES("Mostar Hu�spedes"){
+    MOSTRAR_HUESPEDES("Mostrar Huéspedes"){
         @Override
         public void ejecutar() {
             vista.mostrarHuespedes();
         }
     },
-    INSERTAR_HABITACION("Insertar Habitaci�n"){
+    INSERTAR_HABITACION("Insertar Habitación"){
         @Override
         public void ejecutar() {
             vista.insertarHabitacion();
         }
     },
-    BUSCAR_HABITACION("Buscar Habitaci�n"){
+    BUSCAR_HABITACION("Buscar Habitación"){
         @Override
         public void ejecutar() {
             vista.buscarHabitacion();
         }
     },
-    BORRAR_HABITACION("Borrar Habitaci�n"){
+    BORRAR_HABITACION("Borrar Habitación"){
         @Override
         public void ejecutar() {
             vista.borrarHabitacion();
@@ -74,13 +72,13 @@ public enum Opcion {
             vista.mostrarReservas();
         }
     },
-    LISTAR_RESERVAS_HUESPED("Listar Reservas de un hu�sped"){
+    LISTAR_RESERVAS_HUESPED("Listar Reservas de un huésped"){
         @Override
         public void ejecutar() {
             vista. mostrarReservasHuesped();
         }
     },
-    LISTAR_RESERVAS_TIPO_HABITACION("Listar Reservas de un tipo de habitaci�n"){
+    LISTAR_RESERVAS_TIPO_HABITACION("Listar Reservas de un tipo de habitación"){
         @Override
         public void ejecutar() {
             vista. mostrarReservasTipoHabitacion();

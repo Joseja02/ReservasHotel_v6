@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.iesalandalus.programacion.reservashotel.controlador.Controlador;
 import org.iesalandalus.programacion.reservashotel.modelo.dominio.*;
+import org.iesalandalus.programacion.reservashotel.modelo.negocio.fichero.Habitaciones;
 import org.iesalandalus.programacion.reservashotel.vista.grafica.VistaGrafica;
 import org.iesalandalus.programacion.reservashotel.vista.grafica.recursos.LocalizadorRecursos;
 import org.iesalandalus.programacion.reservashotel.vista.grafica.utilidades.Dialogos;
@@ -167,7 +168,8 @@ public class ControladorVentanaHabitaciones {
     @FXML void borrarHabitacion(ActionEvent event){
         try {
             Controlador controlador = VistaGrafica.getInstancia().getControlador();
-            Habitacion habitacion = null;
+            Habitacion habitacionId = null;
+            Habitacion habitacionABorrar = null;
             if (tfIdBorrar.getText().isBlank() || !tfIdBorrar.getText().matches("\\d+")){
                 throw new IllegalArgumentException("ERROR: El identificador tiene un formato no válido o es nulo");
             }
@@ -183,17 +185,23 @@ public class ControladorVentanaHabitaciones {
                 puerta = entero % 100;
             }
 
-            habitacion = new Simple(planta, puerta, 40);
+            habitacionId = new Simple(planta, puerta, 40);
 
-            List<Reserva> reservasHabitacion = controlador.getReservas(habitacion);
+            List<Reserva> reservasHabitacion = controlador.getReservas(habitacionId);
             for (int i = 0; i < reservasHabitacion.size(); i++) {
-                if (reservasHabitacion.get(i).getHabitacion().equals(habitacion)){
+                if (reservasHabitacion.get(i).getHabitacion().equals(habitacionId)){
                     throw new OperationNotSupportedException("ERROR: No se puede borrar una habitación que tiene, al menos, una reserva asociada.");
                 }
             }
             if (Dialogos.mostrarDialogoConfirmacion("ReservasHotel v5 - Borrar Habitación", "ADVERTENCIA: Seguro que quiere eliminar a este habitación? " + "(Identificador: " + tfIdBorrar.getText() + ")"))
             {
-                controlador.borrar(habitacion);
+                List<Habitacion> listaHabitaciones = controlador.getHabitaciones();
+                for (Habitacion habitacion : listaHabitaciones){
+                    if (habitacion.getIdentificador().equals(habitacionId.getIdentificador())){
+                        habitacionABorrar = habitacion;
+                    }
+                }
+                controlador.borrar(habitacionABorrar);
                 Dialogos.mostrarDialogoInformacion("ReservasHotel v5 - Borrar Habitación", "Habitación borrada con éxito.");
             }
             else event.consume();
@@ -229,7 +237,14 @@ public class ControladorVentanaHabitaciones {
             }
 
             habitacionId = new Simple(planta, puerta, 40);
-            Habitacion habitacion = controlador.buscar(habitacionId);
+            Habitacion habitacionABuscar = null;
+            List<Habitacion> listaHabitaciones = controlador.getHabitaciones();
+            for (Habitacion habitacion : listaHabitaciones){
+                if (habitacion.getIdentificador().equals(habitacionId.getIdentificador())){
+                    habitacionABuscar = habitacion;
+                }
+            }
+            Habitacion habitacion = controlador.buscar(habitacionABuscar);
 
             Parent raiz = fxmlLoader.load();
             ControladorVentanaReservasHabitacion controladorReservasHabitacion = fxmlLoader.getController();

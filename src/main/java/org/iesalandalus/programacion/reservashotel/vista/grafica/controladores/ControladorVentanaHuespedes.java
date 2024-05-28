@@ -116,11 +116,9 @@ public class ControladorVentanaHuespedes {
         try {
             Huesped huesped = new Huesped(tfNombre.getText(),tfDni.getText(), tfCorreo.getText(), tfTelefono.getText(), dpFechaNacimiento.getValue());
             Controlador controlador = VistaGrafica.getInstancia().getControlador();
-            if (!coleccionHuespedes.contains(huesped)) {
-                controlador.insertar(huesped);
-                actualizarListaHuespedes();
-                Dialogos.mostrarDialogoInformacion("ReservasHotel v5 - Insertar Huesped", "Huesped insertado con exito");
-            }
+            controlador.insertar(huesped);
+            actualizarListaHuespedes();
+            Dialogos.mostrarDialogoInformacion("ReservasHotel v5 - Insertar Huesped", "Huesped insertado con exito");
         } catch (NullPointerException | IllegalArgumentException | OperationNotSupportedException e){
             Dialogos.mostrarDialogoError("ReservasHotel v5 - Insertar Huesped", e.getMessage());
         }
@@ -137,7 +135,6 @@ public class ControladorVentanaHuespedes {
                     throw new OperationNotSupportedException("ERROR: No se puede borrar un huésped que tiene, al menos, una reserva hecha.");
                 }
             }
-
             if (Dialogos.mostrarDialogoConfirmacion("ReservasHotel v5 - Borrar Huesped", "ADVERTENCIA: Seguro que quiere eliminar a este huesped? " + "(DNI: " + tfDniBorrar.getText() + ")"))
             {
                 controlador.borrar(huesped);

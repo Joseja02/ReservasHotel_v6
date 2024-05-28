@@ -22,26 +22,22 @@ public class Habitaciones implements IHabitaciones {
     public List<Habitacion> get(TipoHabitacion tipoHabitacion) {
 
         if (tipoHabitacion == null){
-            throw new NullPointerException("ERROR: El tipo de habitaci髇 no puede ser nulo");
+            throw new NullPointerException("ERROR: El tipo de habitaci贸n no puede ser nulo");
         }
-
-        List<Habitacion> copia = copiaProfundaHabitaciones();
         List<Habitacion> habitacionesTipo = new ArrayList<>();
 
         Iterator<Habitacion> iterador = coleccionHabitaciones.iterator();
-        int i = 0;
         while (iterador.hasNext()) {
-            Habitacion habitacion = copia.get(i);
+            Habitacion habitacion = iterador.next();
             if (habitacion instanceof Simple && tipoHabitacion.equals(TipoHabitacion.SIMPLE)) {
-                habitacionesTipo.set(i, habitacion);
+                habitacionesTipo.add(habitacion);
             } else if (habitacion instanceof Doble && tipoHabitacion.equals(TipoHabitacion.DOBLE)) {
-                habitacionesTipo.set(i, habitacion);
+                habitacionesTipo.add(habitacion);
             }else if (habitacion instanceof Triple && tipoHabitacion.equals(TipoHabitacion.TRIPLE)) {
-                habitacionesTipo.set(i, habitacion);
+                habitacionesTipo.add(habitacion);
             }else if (habitacion instanceof Suite && tipoHabitacion.equals(TipoHabitacion.SUITE)) {
-                habitacionesTipo.set(i, habitacion);
+                habitacionesTipo.add(habitacion);
             }
-            i++;
         }
         return habitacionesTipo;
     }
@@ -54,13 +50,13 @@ public class Habitaciones implements IHabitaciones {
         while (iterador.hasNext()) {
             Habitacion habitacion = iterador.next();
             if (habitacion instanceof Simple) {
-                copiaHabitaciones.add(new Simple((Simple) habitacion));
+                copiaHabitaciones.add(new Simple (habitacion.getPlanta(), habitacion.getPuerta(), habitacion.getPrecio()));
             } else if (habitacion instanceof Doble) {
-                copiaHabitaciones.add(new Doble((Doble) habitacion));
+                copiaHabitaciones.add(new Doble (habitacion.getPlanta(), habitacion.getPuerta(), habitacion.getPrecio(), ((Doble) habitacion).getNumCamasIndividuales(), ((Doble) habitacion).getNumCamasDobles()));
             } else if (habitacion instanceof Triple) {
-                copiaHabitaciones.add(new Triple((Triple) habitacion));
+                copiaHabitaciones.add(new Triple (habitacion.getPlanta(), habitacion.getPuerta(), habitacion.getPrecio(), ((Triple) habitacion).getNumBanos(), ((Triple) habitacion).getNumCamasIndividuales(), ((Triple) habitacion).getNumCamasDobles()));
             } else if (habitacion instanceof Suite) {
-                copiaHabitaciones.add(new Suite((Suite) habitacion));
+                copiaHabitaciones.add(new Suite (habitacion.getPlanta(), habitacion.getPuerta(), habitacion.getPrecio(), ((Suite) habitacion).getNumBanos(), ((Suite) habitacion).isTieneJacuzzi()));
             }
         }
         return copiaHabitaciones;
@@ -69,10 +65,10 @@ public class Habitaciones implements IHabitaciones {
     public void insertar(Habitacion habitacion) throws OperationNotSupportedException {
 
         if (habitacion == null) {
-            throw new NullPointerException("ERROR: No se puede insertar una habitaci髇 nula.");
+            throw new NullPointerException("ERROR: No se puede insertar una habitaci贸n nula.");
         }
         if (coleccionHabitaciones.contains(habitacion)) {
-            throw new OperationNotSupportedException("ERROR: Ya existe una habitaci髇 con ese identificador.");
+            throw new OperationNotSupportedException("ERROR: Ya existe una habitaci贸n con ese identificador.");
         }
         coleccionHabitaciones.add(habitacion);
     }
@@ -80,7 +76,7 @@ public class Habitaciones implements IHabitaciones {
     public Habitacion buscar(Habitacion habitacion) {
 
         if (habitacion == null) {
-            throw new NullPointerException("ERROR: No se puede buscar una habitaci髇 nula.");
+            throw new NullPointerException("ERROR: No se puede buscar una habitaci贸n nula.");
         }
         if (coleccionHabitaciones.contains(habitacion)) {
             int i = coleccionHabitaciones.indexOf(habitacion);
@@ -92,11 +88,11 @@ public class Habitaciones implements IHabitaciones {
 
     public void borrar(Habitacion habitacion) throws OperationNotSupportedException {
         if (habitacion == null) {
-            throw new NullPointerException("ERROR: No se puede borrar una habitaci髇 nula.");
+            throw new NullPointerException("ERROR: No se puede borrar una habitaci贸n nula.");
         }
 
         if (!coleccionHabitaciones.contains(habitacion)) {
-            throw new OperationNotSupportedException("ERROR: No existe ninguna habitaci髇 como la indicada.");
+            throw new OperationNotSupportedException("ERROR: No existe ninguna habitaci贸n como la indicada.");
         }
         coleccionHabitaciones.remove(habitacion);
     }

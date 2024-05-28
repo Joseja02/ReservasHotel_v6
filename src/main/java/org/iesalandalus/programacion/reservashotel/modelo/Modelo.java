@@ -33,6 +33,10 @@ public class Modelo implements IModelo {
             fuenteDatos = FactoriaFuenteDatos.MONGODB.crear();
             setFuenteDatos(fuenteDatos);
         }
+        if (factoriaFuenteDatos == FactoriaFuenteDatos.FICHERO){
+            fuenteDatos = FactoriaFuenteDatos.FICHERO.crear();
+            setFuenteDatos(fuenteDatos);
+        }
         comenzar();
     }
     public void comenzar() {

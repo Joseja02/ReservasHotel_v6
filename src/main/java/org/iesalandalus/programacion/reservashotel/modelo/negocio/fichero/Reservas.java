@@ -1,6 +1,5 @@
 package org.iesalandalus.programacion.reservashotel.modelo.negocio.fichero;
 
-import org.iesalandalus.programacion.reservashotel.modelo.Modelo;
 import org.iesalandalus.programacion.reservashotel.modelo.negocio.fichero.utilidades.UtilidadesXML;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -41,6 +40,7 @@ public class Reservas implements IReservas {
 
     public Reservas() {
         coleccionReservas = new ArrayList<>();
+        comenzar();
     }
     public static Reservas getInstancia(){
         if (instancia == null){
@@ -61,22 +61,27 @@ public class Reservas implements IReservas {
             return null;
         }
 
-        String dniHuesped = elemento.getElementsByTagName(DNI_HUESPED).item(0).getTextContent();
-        int plantaHabitacion = Integer.parseInt(elemento.getElementsByTagName(PLANTA_HABITACION).item(0).getTextContent());
-        int puertaHabitacion = Integer.parseInt(elemento.getElementsByTagName(PUERTA_HABITACION).item(0).getTextContent());
+        String dniHuesped = elemento.getAttribute(DNI_HUESPED);
+        int plantaHabitacion = Integer.parseInt(elemento.getAttribute(PLANTA_HABITACION));
+        int puertaHabitacion = Integer.parseInt(elemento.getAttribute(PUERTA_HABITACION));
         String regimenRecibido = elemento.getElementsByTagName(REGIMEN).item(0).getTextContent();
         LocalDate fechaInicioReserva = LocalDate.parse(elemento.getElementsByTagName(FECHA_INICIO_RESERVA).item(0).getTextContent(), FORMATO_FECHA);
         LocalDate fechaFinReserva = LocalDate.parse(elemento.getElementsByTagName(FECHA_FIN_RESERVA).item(0).getTextContent(), FORMATO_FECHA);
-        int numeroPersonas = Integer.parseInt(elemento.getElementsByTagName(NUMERO_PERSONAS).toString());
+        int numeroPersonas = Integer.parseInt(elemento.getElementsByTagName(NUMERO_PERSONAS).item(0).getTextContent());
 
         Huesped huespedDni = new Huesped("Nombre Ficticio", dniHuesped, "ficticio@test.com", "123456789", LocalDate.of(2002, 8, 19));
         Habitacion habitacionId = new Simple(plantaHabitacion, puertaHabitacion, 40);
+        Habitacion habitacionEncontrada = null;
         Regimen regimen = Regimen.valueOf(regimenRecibido);
 
         Huesped huesped = Huespedes.getInstancia().buscar(huespedDni);
-        Habitacion habitacion = Habitaciones.getInstancia().buscar(habitacionId);
-
-        return new Reserva(huesped, habitacion, regimen, fechaInicioReserva, fechaFinReserva, numeroPersonas);
+        List<Habitacion> listaHabitaciones = Habitaciones.getInstancia().get();
+        for (Habitacion habitacion : listaHabitaciones){
+            if (habitacion.getIdentificador().equals(habitacionId.getIdentificador())){
+                habitacionEncontrada = habitacion;
+            }
+        }
+        return new Reserva(huesped, habitacionEncontrada, regimen, fechaInicioReserva, fechaFinReserva, numeroPersonas);
     }
 
     private Element reservaToElement(Document documento, Reserva reserva) {
@@ -85,20 +90,12 @@ public class Reservas implements IReservas {
         }
         Element reservaElement = documento.createElement(RESERVA);
 
-        Element huespedDniElement = documento.createElement(DNI_HUESPED);
-        huespedDniElement.appendChild(documento.createAttribute(reserva.getHuesped().getDni()));
-        reservaElement.appendChild(huespedDniElement);
-
-        Element plantaHabitacionElement = documento.createElement(PLANTA_HABITACION);
-        plantaHabitacionElement.appendChild(documento.createAttribute(Integer.toString(reserva.getHabitacion().getPlanta())));
-        reservaElement.appendChild(plantaHabitacionElement);
-
-        Element puertaHabitacionElement = documento.createElement(PUERTA_HABITACION);
-        puertaHabitacionElement.appendChild(documento.createAttribute(Integer.toString(reserva.getHabitacion().getPuerta())));
-        reservaElement.appendChild(puertaHabitacionElement);
+        reservaElement.setAttribute(DNI_HUESPED, reserva.getHuesped().getDni());
+        reservaElement.setAttribute(PLANTA_HABITACION, (Integer.toString(reserva.getHabitacion().getPlanta())));
+        reservaElement.setAttribute(PUERTA_HABITACION, (Integer.toString(reserva.getHabitacion().getPuerta())));
 
         Element regimenElement = documento.createElement(REGIMEN);
-        regimenElement.appendChild(documento.createTextNode(reserva.getRegimen().toString()));
+        regimenElement.appendChild(documento.createTextNode(reserva.getRegimen().name()));
         reservaElement.appendChild(regimenElement);
 
         Element fechaInicioReservaElement = documento.createElement(FECHA_INICIO_RESERVA);
@@ -114,11 +111,11 @@ public class Reservas implements IReservas {
         reservaElement.appendChild(numPersonasElement);
 
         Element fechaCheckinElement = documento.createElement(CHECKIN);
-        fechaCheckinElement.appendChild(documento.createTextNode(reserva.getCheckIn().format(FORMATO_FECHA_HORA)));
+        fechaCheckinElement.appendChild(documento.createTextNode(reserva.getCheckIn() == null ? "No registrado" : reserva.getCheckIn().format(DateTimeFormatter.ofPattern(String.valueOf(FORMATO_FECHA_HORA)))));
         reservaElement.appendChild(fechaCheckinElement);
 
         Element fechaCheckoutElement = documento.createElement(CHECKOUT);
-        fechaCheckoutElement.appendChild(documento.createTextNode(reserva.getCheckOut().format(FORMATO_FECHA_HORA)));
+        fechaCheckoutElement.appendChild(documento.createTextNode(reserva.getCheckOut() == null ? "No registrado" : reserva.getCheckOut().format(DateTimeFormatter.ofPattern(String.valueOf(FORMATO_FECHA_HORA)))));
         reservaElement.appendChild(fechaCheckoutElement);
 
         Element precioElement = documento.createElement(PRECIO);
@@ -129,15 +126,25 @@ public class Reservas implements IReservas {
     }
 
     private void leerXML() {
-        try {
-            Document document = UtilidadesXML.xmlToDom(RUTA_FICHERO);
-            NodeList nodeList = document.getDocumentElement().getElementsByTagName(RESERVA);
+        Document document;
+        NodeList reservas;
+        Node reservaNodo;
 
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node node = nodeList.item(i);
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    Element element = (Element) node;
-                    Reserva reserva = elementToReserva(element);
+        try {
+            document = UtilidadesXML.xmlToDom(RUTA_FICHERO);
+            if (document == null){
+                document = UtilidadesXML.crearDomVacio(RAIZ);
+            }
+            document.getDocumentElement().normalize();
+
+            reservas = document.getElementsByTagName(RESERVA);
+
+            for (int i = 0; i < reservas.getLength(); i++) {
+                reservaNodo = reservas.item(i);
+
+                if (reservaNodo.getNodeType() == Node.ELEMENT_NODE) {
+                    Element elemento = (Element) reservaNodo;
+                    Reserva reserva = elementToReserva(elemento);
                     coleccionReservas.add(reserva);
                 }
             }
@@ -148,7 +155,8 @@ public class Reservas implements IReservas {
 
     private void escribirXML() {
         try {
-            Document documento = UtilidadesXML.crearDomVacio(RAIZ);
+            Document documento;
+            documento = UtilidadesXML.crearDomVacio(RAIZ);
             for (Reserva reserva : coleccionReservas) {
                 Element reservaElement = reservaToElement(documento, reserva);
                 documento.getDocumentElement().appendChild(reservaElement);
@@ -158,13 +166,11 @@ public class Reservas implements IReservas {
             System.out.println(e.getMessage());
         }
     }
-
     public List<Reserva> get() {
-        return copiaProfundaReservaes();
+        return copiaProfundaReservas();
     }
 
-    private List<Reserva> copiaProfundaReservaes() {
-
+    private List<Reserva> copiaProfundaReservas() {
         List<Reserva> copiaReservas = new ArrayList<>();
 
         Iterator<Reserva> iterador = coleccionReservas.iterator();
@@ -228,13 +234,11 @@ public class Reservas implements IReservas {
         }
         List<Reserva> reservasHuesped = new ArrayList<>();
         Iterator<Reserva> iterador = get().iterator();
-        int i = 0;
         while (iterador.hasNext()) {
-            Reserva reserva = get().get(i);
+            Reserva reserva = iterador.next();
             if (reserva.getHuesped().getDni().equals(huesped.getDni())) {
                 reservasHuesped.add(new Reserva(reserva));
             }
-            i++;
         }
         return reservasHuesped;
     }
@@ -245,9 +249,8 @@ public class Reservas implements IReservas {
         }
         List<Reserva> reservasHuesped = new ArrayList<>();
         Iterator<Reserva> iterador = get().iterator();
-        int i = 0;
         while (iterador.hasNext()) {
-            Reserva reserva = get().get(i);
+            Reserva reserva = iterador.next();
             if (reserva.getHabitacion() instanceof Simple && tipoHabitacion.equals(TipoHabitacion.SIMPLE)){
                 reservasHuesped.add(new Reserva(reserva));
             }
@@ -260,7 +263,6 @@ public class Reservas implements IReservas {
             if (reserva.getHabitacion() instanceof Suite && tipoHabitacion.equals(TipoHabitacion.SUITE)){
                 reservasHuesped.add(new Reserva(reserva));
             }
-            i++;
         }
         return reservasHuesped;
     }
@@ -270,13 +272,11 @@ public class Reservas implements IReservas {
         }
         List<Reserva> reservasHabitacion = new ArrayList<>();
         Iterator<Reserva> iterador = get().iterator();
-        int i = 0;
         while (iterador.hasNext()) {
-            Reserva reserva = get().get(i);
+            Reserva reserva = iterador.next();
             if (reserva.getHabitacion().getIdentificador().equals(habitacion.getIdentificador())) {
                 reservasHabitacion.add(new Reserva(reserva));
             }
-            i++;
         }
         return reservasHabitacion;
     }
@@ -286,14 +286,12 @@ public class Reservas implements IReservas {
 
         List<Reserva> reservasHuesped = new ArrayList<>();
         Iterator<Reserva> iterador = get().iterator();
-        int i = 0;
         while (iterador.hasNext()){
-            Reserva reserva = get().get(i);
+            Reserva reserva = iterador.next();
             if (reserva.getHabitacion().getIdentificador().equals(habitacion.getIdentificador()) &&
                     reserva.getFechaInicioReserva().isAfter(LocalDate.now())) {
                 reservasHuesped.add(new Reserva(reserva));
             }
-            i++;
         }
         return reservasHuesped;
     }

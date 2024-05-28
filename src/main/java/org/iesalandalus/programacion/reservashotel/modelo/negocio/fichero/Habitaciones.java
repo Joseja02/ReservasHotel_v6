@@ -38,6 +38,7 @@ public class Habitaciones implements IHabitaciones {
 
     public Habitaciones() {
         coleccionHabitaciones = new ArrayList<>();
+        comenzar();
     }
     public static Habitaciones getInstancia(){
         if (instancia == null){
@@ -57,17 +58,17 @@ public class Habitaciones implements IHabitaciones {
             return null;
         }
         Habitacion habitacion = null;
-        String tipo = elemento.getElementsByTagName(TIPO).item(0).getTextContent();
+        String tipo = elemento.getAttribute(TIPO);
 
         switch (tipo) {
             case SIMPLE -> {
-                int planta = Integer.parseInt(elemento.getElementsByTagName(PLANTA).toString());
+                int planta = Integer.parseInt(elemento.getElementsByTagName(PLANTA).item(0).getTextContent());
                 int puerta = Integer.parseInt(elemento.getElementsByTagName(PUERTA).item(0).getTextContent());
                 double precio = Double.parseDouble(elemento.getElementsByTagName(PRECIO).item(0).getTextContent());
                 return new Simple(planta, puerta, precio);
             }
             case DOBLE -> {
-                int planta = Integer.parseInt(elemento.getElementsByTagName(PLANTA).toString());
+                int planta = Integer.parseInt(elemento.getElementsByTagName(PLANTA).item(0).getTextContent());
                 int puerta = Integer.parseInt(elemento.getElementsByTagName(PUERTA).item(0).getTextContent());
                 double precio = Double.parseDouble(elemento.getElementsByTagName(PRECIO).item(0).getTextContent());
                 int numCamasIndividuales = Integer.parseInt(elemento.getElementsByTagName(CAMAS_INDIVIDUALES).item(0).getTextContent());
@@ -75,19 +76,19 @@ public class Habitaciones implements IHabitaciones {
                 return new Doble(planta, puerta, precio, numCamasIndividuales, numCamasDobles);
             }
             case TRIPLE -> {
-                int planta = Integer.parseInt(elemento.getElementsByTagName(PLANTA).toString());
+                int planta = Integer.parseInt(elemento.getElementsByTagName(PLANTA).item(0).getTextContent());
                 int puerta = Integer.parseInt(elemento.getElementsByTagName(PUERTA).item(0).getTextContent());
                 double precio = Double.parseDouble(elemento.getElementsByTagName(PRECIO).item(0).getTextContent());
-                int numBanos = Integer.parseInt(elemento.getElementsByTagName(BANOS).toString());
+                int numBanos = Integer.parseInt(elemento.getElementsByTagName(BANOS).item(0).getTextContent());
                 int numCamasIndividuales = Integer.parseInt(elemento.getElementsByTagName(CAMAS_INDIVIDUALES).item(0).getTextContent());
                 int numCamasDobles = Integer.parseInt(elemento.getElementsByTagName(CAMAS_DOBLES).item(0).getTextContent());
                 return new Triple(planta, puerta, precio, numBanos, numCamasIndividuales, numCamasDobles);
             }
             case SUITE -> {
-                int planta = Integer.parseInt(elemento.getElementsByTagName(PLANTA).toString());
+                int planta = Integer.parseInt(elemento.getElementsByTagName(PLANTA).item(0).getTextContent());
                 int puerta = Integer.parseInt(elemento.getElementsByTagName(PUERTA).item(0).getTextContent());
                 double precio = Double.parseDouble(elemento.getElementsByTagName(PRECIO).item(0).getTextContent());
-                int numBanos = Integer.parseInt(elemento.getElementsByTagName(BANOS).toString());
+                int numBanos = Integer.parseInt(elemento.getElementsByTagName(BANOS).item(0).getTextContent());
                 boolean tieneJacuzzi = Boolean.parseBoolean(elemento.getElementsByTagName(JACUZZI).item(0).getTextContent());
                 return new Suite(planta, puerta, precio, numBanos, tieneJacuzzi);
             }
@@ -100,9 +101,7 @@ public class Habitaciones implements IHabitaciones {
         }
         Element habitacionElement = documento.createElement(HABITACION);
 
-        Element identificadorElement = documento.createElement(IDENTIFICADOR);
-        identificadorElement.appendChild(documento.createAttribute(habitacion.getIdentificador()));
-        habitacionElement.appendChild(identificadorElement);
+        habitacionElement.setAttribute(IDENTIFICADOR, habitacion.getIdentificador());
 
         Element plantaElement = documento.createElement(PLANTA);
         plantaElement.appendChild(documento.createTextNode(Integer.toString(habitacion.getPlanta())));
@@ -117,66 +116,74 @@ public class Habitaciones implements IHabitaciones {
         habitacionElement.appendChild(precioElement);
 
         if (habitacion instanceof Simple){
-            Element tipoElement = documento.createElement(TIPO);
-            tipoElement.appendChild(documento.createAttribute(SIMPLE));
-            habitacionElement.appendChild(tipoElement);
+            habitacionElement.setAttribute(TIPO, SIMPLE);
         }
         if (habitacion instanceof Doble){
-            Element tipoElement = documento.createElement(TIPO);
-            tipoElement.appendChild(documento.createAttribute(DOBLE));
-            habitacionElement.appendChild(tipoElement);
+            habitacionElement.setAttribute(TIPO, DOBLE);
+            Element dobleElement = documento.createElement(DOBLE);
+            habitacionElement.appendChild(dobleElement);
 
             Element numCamasIndividualesElement = documento.createElement(CAMAS_INDIVIDUALES);
             numCamasIndividualesElement.appendChild(documento.createTextNode(Integer.toString(((Doble) habitacion).getNumCamasIndividuales())));
-            habitacionElement.appendChild(numCamasIndividualesElement);
+            dobleElement.appendChild(numCamasIndividualesElement);
 
             Element numCamasDoblesElement = documento.createElement(CAMAS_DOBLES);
             numCamasDoblesElement.appendChild(documento.createTextNode(Integer.toString(((Doble) habitacion).getNumCamasDobles())));
-            habitacionElement.appendChild(numCamasDoblesElement);
+            dobleElement.appendChild(numCamasDoblesElement);
         }
 
         if (habitacion instanceof Triple){
-            Element tipoElement = documento.createElement(TIPO);
-            tipoElement.appendChild(documento.createAttribute(TRIPLE));
-            habitacionElement.appendChild(tipoElement);
+            habitacionElement.setAttribute(TIPO, TRIPLE);
+            Element tripleElement = documento.createElement(TRIPLE);
+            habitacionElement.appendChild(tripleElement);
 
             Element numBanosElement = documento.createElement(BANOS);
             numBanosElement.appendChild(documento.createTextNode(Integer.toString(((Triple) habitacion).getNumBanos())));
-            habitacionElement.appendChild(numBanosElement);
+            tripleElement.appendChild(numBanosElement);
 
             Element numCamasIndividualesElement = documento.createElement(CAMAS_INDIVIDUALES);
             numCamasIndividualesElement.appendChild(documento.createTextNode(Integer.toString(((Triple) habitacion).getNumCamasIndividuales())));
-            habitacionElement.appendChild(numCamasIndividualesElement);
+            tripleElement.appendChild(numCamasIndividualesElement);
 
             Element numCamasDoblesElement = documento.createElement(CAMAS_DOBLES);
             numCamasDoblesElement.appendChild(documento.createTextNode(Integer.toString(((Triple) habitacion).getNumCamasDobles())));
-            habitacionElement.appendChild(numCamasDoblesElement);
+            tripleElement.appendChild(numCamasDoblesElement);
         }
         if (habitacion instanceof Suite){
-            Element tipoElement = documento.createElement(TIPO);
-            tipoElement.appendChild(documento.createAttribute(SUITE));
-            habitacionElement.appendChild(tipoElement);
+            habitacionElement.setAttribute(TIPO, SUITE);
+            Element suiteElement = documento.createElement(SUITE);
+            habitacionElement.appendChild(suiteElement);
 
             Element numBanosElement = documento.createElement(BANOS);
-            numBanosElement.appendChild(documento.createTextNode(Integer.toString(((Triple) habitacion).getNumBanos())));
-            habitacionElement.appendChild(numBanosElement);
+            numBanosElement.appendChild(documento.createTextNode(Integer.toString(((Suite) habitacion).getNumBanos())));
+            suiteElement.appendChild(numBanosElement);
 
             Element tieneJacuzziElement = documento.createElement(JACUZZI);
             tieneJacuzziElement.appendChild(documento.createTextNode(Boolean.toString(((Suite) habitacion).isTieneJacuzzi())));
-            habitacionElement.appendChild(tieneJacuzziElement);
+            suiteElement.appendChild(tieneJacuzziElement);
         }
         return habitacionElement;
     }
     private void leerXML() {
-        try {
-            Document document = UtilidadesXML.xmlToDom(RUTA_FICHERO);
-            NodeList nodeList = document.getDocumentElement().getElementsByTagName(HABITACION);
+        Document document;
+        NodeList habitaciones;
+        Node habitacionNodo;
 
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node node = nodeList.item(i);
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    Element element = (Element) node;
-                    Habitacion habitacion = elementToHabitacion(element);
+        try {
+            document = UtilidadesXML.xmlToDom(RUTA_FICHERO);
+            if (document == null){
+                document = UtilidadesXML.crearDomVacio(RAIZ);
+            }
+            document.getDocumentElement().normalize();
+
+            habitaciones = document.getElementsByTagName(HABITACION);
+
+            for (int i = 0; i < habitaciones.getLength(); i++) {
+                habitacionNodo = habitaciones.item(i);
+
+                if (habitacionNodo.getNodeType() == Node.ELEMENT_NODE) {
+                    Element elemento = (Element) habitacionNodo;
+                    Habitacion habitacion = elementToHabitacion(elemento);
                     coleccionHabitaciones.add(habitacion);
                 }
             }
@@ -186,7 +193,8 @@ public class Habitaciones implements IHabitaciones {
     }
     private void escribirXML() {
         try {
-            Document documento = UtilidadesXML.crearDomVacio(RAIZ);
+            Document documento;
+            documento = UtilidadesXML.crearDomVacio(RAIZ);
             for (Habitacion habitacion : coleccionHabitaciones) {
                 Element habitacionElement = habitacionToElement(documento, habitacion);
                 documento.getDocumentElement().appendChild(habitacionElement);
@@ -196,7 +204,6 @@ public class Habitaciones implements IHabitaciones {
             System.out.println(e.getMessage());
         }
     }
-
     public List<Habitacion> get() {
         return copiaProfundaHabitaciones();
     }
@@ -206,24 +213,20 @@ public class Habitaciones implements IHabitaciones {
         if (tipoHabitacion == null){
             throw new NullPointerException("ERROR: El tipo de habitación no puede ser nulo");
         }
-
-        List<Habitacion> copia = copiaProfundaHabitaciones();
         List<Habitacion> habitacionesTipo = new ArrayList<>();
 
         Iterator<Habitacion> iterador = coleccionHabitaciones.iterator();
-        int i = 0;
         while (iterador.hasNext()) {
-            Habitacion habitacion = copia.get(i);
+            Habitacion habitacion = iterador.next();
             if (habitacion instanceof Simple && tipoHabitacion.equals(TipoHabitacion.SIMPLE)) {
-                habitacionesTipo.set(i, habitacion);
+                habitacionesTipo.add(habitacion);
             } else if (habitacion instanceof Doble && tipoHabitacion.equals(TipoHabitacion.DOBLE)) {
-                habitacionesTipo.set(i, habitacion);
+                habitacionesTipo.add(habitacion);
             }else if (habitacion instanceof Triple && tipoHabitacion.equals(TipoHabitacion.TRIPLE)) {
-                habitacionesTipo.set(i, habitacion);
+                habitacionesTipo.add(habitacion);
             }else if (habitacion instanceof Suite && tipoHabitacion.equals(TipoHabitacion.SUITE)) {
-                habitacionesTipo.set(i, habitacion);
+                habitacionesTipo.add(habitacion);
             }
-            i++;
         }
         return habitacionesTipo;
     }
@@ -236,13 +239,13 @@ public class Habitaciones implements IHabitaciones {
         while (iterador.hasNext()) {
             Habitacion habitacion = iterador.next();
             if (habitacion instanceof Simple) {
-                copiaHabitaciones.add(new Simple((Simple) habitacion));
+                copiaHabitaciones.add(new Simple (habitacion.getPlanta(), habitacion.getPuerta(), habitacion.getPrecio()));
             } else if (habitacion instanceof Doble) {
-                copiaHabitaciones.add(new Doble((Doble) habitacion));
+                copiaHabitaciones.add(new Doble (habitacion.getPlanta(), habitacion.getPuerta(), habitacion.getPrecio(), ((Doble) habitacion).getNumCamasIndividuales(), ((Doble) habitacion).getNumCamasDobles()));
             } else if (habitacion instanceof Triple) {
-                copiaHabitaciones.add(new Triple((Triple) habitacion));
+                copiaHabitaciones.add(new Triple (habitacion.getPlanta(), habitacion.getPuerta(), habitacion.getPrecio(), ((Triple) habitacion).getNumBanos(), ((Triple) habitacion).getNumCamasIndividuales(), ((Triple) habitacion).getNumCamasDobles()));
             } else if (habitacion instanceof Suite) {
-                copiaHabitaciones.add(new Suite((Suite) habitacion));
+                copiaHabitaciones.add(new Suite (habitacion.getPlanta(), habitacion.getPuerta(), habitacion.getPrecio(), ((Suite) habitacion).getNumBanos(), ((Suite) habitacion).isTieneJacuzzi()));
             }
         }
         return copiaHabitaciones;

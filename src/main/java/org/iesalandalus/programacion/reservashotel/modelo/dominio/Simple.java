@@ -14,6 +14,6 @@ public class Simple extends Habitacion {
 
     @Override
     public String toString() {
-        return super.toString() + ", habitación simple, " + "capacidad="+NUM_MAXIMO_PERSONAS+" personas";
+        return super.toString() + ", habitaciÃ³n simple, " + "capacidad="+NUM_MAXIMO_PERSONAS+" personas";
     }
 }
